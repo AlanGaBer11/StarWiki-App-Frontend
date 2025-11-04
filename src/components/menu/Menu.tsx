@@ -1,0 +1,118 @@
+import {
+  IonContent,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonMenu,
+  IonMenuToggle,
+  IonNote,
+} from "@ionic/react";
+
+import { useLocation } from "react-router";
+import {
+  homeOutline,
+  homeSharp,
+  videocamOutline,
+  videocamSharp,
+  gameControllerOutline,
+  gameControllerSharp,
+  tvOutline,
+  tvSharp,
+  bookmarkOutline,
+} from "ionicons/icons";
+import DarkModeToggle from "../dark-mode-toggle/DarkModeToggle";
+import "./Menu.css";
+
+interface AppPage {
+  url: string;
+  iosIcon: string;
+  mdIcon: string;
+  title: string;
+}
+
+const appPages: AppPage[] = [
+  {
+    title: "Inicio",
+    url: "/inicio",
+    iosIcon: homeOutline,
+    mdIcon: homeSharp,
+  },
+  {
+    title: "Star Wars",
+    url: "/star-wars",
+    iosIcon: videocamOutline,
+    mdIcon: videocamSharp,
+  },
+  {
+    title: "Videojuegos",
+    url: "/videojuegos",
+    iosIcon: gameControllerOutline,
+    mdIcon: gameControllerSharp,
+  },
+  {
+    title: "Anime",
+    url: "/anime",
+    iosIcon: tvOutline,
+    mdIcon: tvSharp,
+  },
+];
+
+const labels = [
+  {
+    title: "Posts",
+    link: "/posts",
+  },
+];
+
+const Menu: React.FC = () => {
+  const location = useLocation();
+
+  return (
+    <IonMenu contentId="main" type="overlay">
+      <IonContent>
+        <IonList id="inbox-list">
+          <IonListHeader>Inbox</IonListHeader>
+          <IonNote>hi@ionicframework.com</IonNote>
+          <DarkModeToggle />
+          {appPages.map((appPage, index) => {
+            return (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={
+                    location.pathname === appPage.url ? "selected" : ""
+                  }
+                  routerLink={appPage.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon
+                    aria-hidden="true"
+                    slot="start"
+                    ios={appPage.iosIcon}
+                    md={appPage.mdIcon}
+                  />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            );
+          })}
+        </IonList>
+
+        <IonList id="labels-list">
+          <IonListHeader>Labels</IonListHeader>
+          {labels.map((label, index) => (
+            <IonItem lines="none" key={index} routerLink={label.title}>
+              <IonIcon aria-hidden="true" slot="start" icon={bookmarkOutline} />
+              <IonLabel>{label.title}</IonLabel>
+            </IonItem>
+          ))}
+        </IonList>
+      </IonContent>
+    </IonMenu>
+  );
+};
+
+export default Menu;
