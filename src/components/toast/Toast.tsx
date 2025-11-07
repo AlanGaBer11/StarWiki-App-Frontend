@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { IonToast } from "@ionic/react";
+import {
+  checkmarkCircleSharp,
+  closeCircleSharp,
+  informationSharp,
+  alertCircleSharp,
+} from "ionicons/icons";
+import "./Toast.css";
 
 interface ToastProps {
   message?: string;
@@ -75,16 +82,24 @@ const Toast: React.FC<ToastProps> = ({
     loading: "medium",
     show: color ?? "primary",
   };
+  const iconMap: Record<string, ToastProps["icon"] | undefined> = {
+    success: checkmarkCircleSharp,
+    error: closeCircleSharp,
+    info: informationSharp,
+    warning: alertCircleSharp,
+  };
 
   const finalColor = color ?? (state ? colorMap[state] : undefined);
+  const findIcon = icon ?? (state ? iconMap[state] : undefined);
 
   return (
     <IonToast
+      className="custom-toast"
       isOpen={isOpen}
       message={message}
       duration={duration}
       color={finalColor}
-      icon={icon}
+      icon={findIcon}
       onDidDismiss={() => {
         setIsOpen(false);
         onClose?.();
