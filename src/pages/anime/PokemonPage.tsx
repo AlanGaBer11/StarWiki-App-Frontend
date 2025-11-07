@@ -9,7 +9,7 @@ import {
   IonBackButton,
   IonContent,
 } from "@ionic/react";
-import { ANIMES } from "../../data/AnimeData";
+import { ANIMES } from "../../data/animeData";
 import AnimeContent from "../../components/content/AnimeContent";
 import Pokedex from "../../components/pokedex/Pokedex";
 

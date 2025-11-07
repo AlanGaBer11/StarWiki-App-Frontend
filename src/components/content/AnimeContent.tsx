@@ -1,5 +1,5 @@
 import React from "react";
-import { AnimeData } from "../../data/AnimeData";
+import { AnimeData } from "../../data/animeData";
 import "./AnimeContent.css";
 
 interface AnimeContentProps {

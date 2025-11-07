@@ -21,7 +21,7 @@ import {
   IonBadge,
   IonBackButton,
 } from "@ionic/react";
-import { ANIMES } from "../../data/AnimeData";
+import { ANIMES } from "../../data/animeData";
 import AnimeContent from "../../components/content/AnimeContent";
 import { useAttackTitanStore } from "../../store/attackTitanStore";
 

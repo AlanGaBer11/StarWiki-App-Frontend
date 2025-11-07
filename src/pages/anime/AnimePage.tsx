@@ -17,7 +17,7 @@ import {
   IonButton,
   IonBackButton,
 } from "@ionic/react";
-import { ANIMES } from "../../data/AnimeData";
+import { ANIMES } from "../../data/animeData";
 import "./AnimaPage.css";
 
 const AnimePage: React.FC = () => {

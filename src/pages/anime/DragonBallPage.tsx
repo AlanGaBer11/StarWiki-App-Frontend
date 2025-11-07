@@ -19,7 +19,7 @@ import {
   IonButton,
   IonChip,
 } from "@ionic/react";
-import { ANIMES } from "../../data/AnimeData";
+import { ANIMES } from "../../data/animeData";
 import AnimeContent from "../../components/content/AnimeContent";
 import { useDragonBallStore } from "../../store/dragonBallStore";
 
