@@ -17,7 +17,7 @@ import {
   IonButton,
   IonBackButton,
 } from "@ionic/react";
-import { ANIMES } from "../../data/animeData";
+import { AnimeData, ANIMES } from "../../data/animeData";
 import "./AnimaPage.css";
 
 const AnimePage: React.FC = () => {
@@ -52,7 +52,7 @@ const AnimePage: React.FC = () => {
 
         <IonGrid>
           <IonRow>
-            {ANIMES.map((anime, index) => (
+            {ANIMES.map((anime: AnimeData, index: number) => (
               <IonCol
                 size="12"
                 sizeMd="4"
