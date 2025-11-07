@@ -17,7 +17,8 @@ ion-menu.md ion-note {
   margin-bottom: 30px;
 }
 
-ion-menu.md ion-list-header, ion-menu.md ion-note {
+ion-menu.md ion-list-header,
+ion-menu.md ion-note {
   padding-left: 10px;
 }
 
@@ -98,10 +99,6 @@ ion-menu.ios ion-note {
   padding-right: 16px;
 }
 
-ion-menu.ios ion-note {
-  margin-bottom: 8px;
-}
-
 ion-note {
   display: inline-block;
   font-size: 16px;
@@ -110,4 +107,22 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
-} 
+}
+ion-list-header > .menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.menu-header .menu-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+ion-img {
+  width: 64px;
+  height: 64px;
+}
