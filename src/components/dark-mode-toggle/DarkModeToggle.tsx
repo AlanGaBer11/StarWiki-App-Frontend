@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { IonItem, IonToggle, IonIcon, IonLabel } from "@ionic/react";
 import type { ToggleCustomEvent } from "@ionic/react";
-import { moonOutline, sunnyOutline } from "ionicons/icons";
+import {
+  moonOutline,
+  sunnyOutline,
+  moonSharp,
+  sunnySharp,
+} from "ionicons/icons";
 import "./DarkModeToggle.css";
 
 const DarkModeToggle: React.FC = () => {
@@ -66,7 +71,8 @@ const DarkModeToggle: React.FC = () => {
   return (
     <IonItem className="dark-toggle-item" lines="none">
       <IonIcon
-        icon={paletteToggle ? moonOutline : sunnyOutline}
+        ios={paletteToggle ? moonOutline : sunnyOutline}
+        md={paletteToggle ? moonSharp : sunnySharp}
         slot="start"
         className="theme-icon"
       />
