@@ -8,7 +8,7 @@ import {
   IonImg,
   IonMenu,
   IonMenuToggle,
-  IonNote,
+  IonAvatar,
 } from "@ionic/react";
 
 import logo from "/icon/logo.png";
@@ -24,6 +24,11 @@ import {
   tvOutline,
   tvSharp,
   bookmarkOutline,
+  bookmarkSharp,
+  personCircleOutline,
+  personCircleSharp,
+  settingsOutline,
+  settingsSharp,
 } from "ionicons/icons";
 import DarkModeToggle from "../dark-mode-toggle/DarkModeToggle";
 import LoginButton from "../botones/LoginButton";
@@ -64,10 +69,30 @@ const appPages: AppPage[] = [
   },
 ];
 
-const labels = [
+const publicPages: AppPage[] = [
   {
     title: "Posts",
-    link: "/posts",
+    url: "/posts",
+    iosIcon: bookmarkOutline,
+    mdIcon: bookmarkSharp,
+  },
+];
+
+const userPages: AppPage[] = [
+  {
+    title: "Perfil",
+    url: "/perfil",
+    iosIcon: personCircleOutline,
+    mdIcon: personCircleSharp,
+  },
+];
+
+const adminPages: AppPage[] = [
+  {
+    title: "Panel de Administrador",
+    url: "/admin",
+    iosIcon: settingsOutline,
+    mdIcon: settingsSharp,
   },
 ];
 
@@ -85,23 +110,16 @@ const Menu: React.FC = () => {
               <IonImg src={logo} alt="StarWiki Logo" />
             </div>
           </IonListHeader>
-          <IonItem lines="none" className="ion-no-padding ion-margin-bottom">
+          <IonItem className="user-info" lines="none">
             {isAuthenticated && user ? (
               <>
+                <IonAvatar slot="start">
+                  <img src={user.avatar_url || "/icon/logo.png"} alt="Avatar" />
+                </IonAvatar>
                 <IonLabel>
                   <h2>{user.nombre_usuario || user.nombre}</h2>
                   <p className="ion-text-left">{user.email}</p>
                 </IonLabel>
-                <IonImg
-                  src={user.avatar_url}
-                  alt="Avatar"
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                    marginLeft: "8px",
-                  }}
-                />
               </>
             ) : (
               <IonLabel>
@@ -110,43 +128,94 @@ const Menu: React.FC = () => {
               </IonLabel>
             )}
           </IonItem>
-          <LoginButton />
-          <DarkModeToggle />
+          <div className="menu-actions">
+            <LoginButton />
+            <br />
+            <DarkModeToggle />
+          </div>
+        </IonList>
 
-          {appPages.map((appPage, index) => {
-            return (
+        {/* Navegacion Principal */}
+
+        <IonList>
+          <IonListHeader>Explorar</IonListHeader>
+
+          {appPages.map((page, index) => (
+            <IonMenuToggle key={index} autoHide={false}>
+              <IonItem
+                className={location.pathname === page.url ? "selected" : ""}
+                routerLink={page.url}
+                routerDirection="none"
+                lines="none"
+                detail={false}
+              >
+                <IonIcon slot="start" ios={page.iosIcon} md={page.mdIcon} />
+                <IonLabel>{page.title}</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          ))}
+        </IonList>
+
+        {/* Página pública */}
+        <IonList>
+          <IonListHeader>Contenido</IonListHeader>
+          {publicPages.map((page, index) => (
+            <IonMenuToggle key={index} autoHide={false}>
+              <IonItem
+                className={location.pathname === page.url ? "selected" : ""}
+                routerLink={page.url}
+                routerDirection="none"
+                lines="none"
+                detail={false}
+              >
+                <IonIcon slot="start" ios={page.iosIcon} md={page.mdIcon} />
+                <IonLabel>{page.title}</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          ))}
+        </IonList>
+
+        {/* Sección de usuario */}
+        {isAuthenticated && (
+          <IonList>
+            <IonListHeader>Usuario</IonListHeader>
+            {userPages.map((page, index) => (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem
-                  className={
-                    location.pathname === appPage.url ? "selected" : ""
-                  }
-                  routerLink={appPage.url}
+                  className={location.pathname === page.url ? "selected" : ""}
+                  routerLink={page.url}
                   routerDirection="none"
                   lines="none"
                   detail={false}
                 >
-                  <IonIcon
-                    aria-hidden="true"
-                    slot="start"
-                    ios={appPage.iosIcon}
-                    md={appPage.mdIcon}
-                  />
-                  <IonLabel>{appPage.title}</IonLabel>
+                  <IonIcon slot="start" ios={page.iosIcon} md={page.mdIcon} />
+                  <IonLabel>{page.title}</IonLabel>
                 </IonItem>
               </IonMenuToggle>
-            );
-          })}
-        </IonList>
+            ))}
+          </IonList>
+        )}
 
-        <IonList id="labels-list">
-          <IonListHeader>Labels</IonListHeader>
-          {labels.map((label, index) => (
-            <IonItem lines="none" key={index} routerLink={label.title}>
-              <IonIcon aria-hidden="true" slot="start" icon={bookmarkOutline} />
-              <IonLabel>{label.title}</IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
+        {/* Sección del administrador */}
+        {isAuthenticated && user?.rol === "ADMIN" && (
+          <IonList>
+            <IonListHeader>Administración</IonListHeader>
+            {adminPages.map((page, index) => (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={location.pathname === page.url ? "selected" : ""}
+                  routerLink={page.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon slot="start" ios={page.iosIcon} md={page.mdIcon} />
+                  <IonLabel>{page.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            ))}
+          </IonList>
+        )}
       </IonContent>
     </IonMenu>
   );
