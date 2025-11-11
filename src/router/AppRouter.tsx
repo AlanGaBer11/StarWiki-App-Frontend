@@ -20,6 +20,7 @@ import AttackOnTitanPage from "../pages/anime/AttackOnTitanPage";
 import OnePiecePage from "../pages/anime/OnePiece";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import PostsPage from "../pages/posts/PostsPage";
 
 const AppRouter: React.FC = () => {
   return (
@@ -96,6 +97,12 @@ const AppRouter: React.FC = () => {
         </Route>
         <Route path="/register" exact={true}>
           <Register />
+        </Route>
+        <Route path="/posts" exact={true}>
+          <PostsPage />
+        </Route>
+        <Route path="/posts/:nombre_categoria" exact={true}>
+          <PostsPage />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
