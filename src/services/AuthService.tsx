@@ -16,8 +16,6 @@ const isNative = (): boolean => {
   }
 };
 
-const API_URL_DEV = "http://localhost:3000/api/v2";
-
 const AuthService = {
   authListeners: [] as (() => void)[],
 
@@ -74,14 +72,12 @@ const AuthService = {
   async saveToken(token: string, userData?: UserData) {
     if (isNative()) {
       await CapacitorCookies.setCookie({
-        url: API_URL_DEV,
         key: "token",
         value: token,
       });
 
       if (userData) {
         await CapacitorCookies.setCookie({
-          url: API_URL_DEV,
           key: "user",
           value: JSON.stringify(userData),
         });
@@ -101,9 +97,7 @@ const AuthService = {
   // Verifica si el usuario está autenticado
   async isAuthenticated(): Promise<boolean> {
     if (isNative()) {
-      const { cookies } = await CapacitorCookies.getCookies({
-        url: API_URL_DEV,
-      });
+      const { cookies } = await CapacitorCookies.getCookies({});
       const cookieMap = this.parseCookies(cookies);
       return !!cookieMap["token"];
     }
@@ -119,8 +113,8 @@ const AuthService = {
   // Cerrar sesión (eliminar cookies)
   async logout() {
     if (isNative()) {
-      await CapacitorCookies.deleteCookie({ url: API_URL_DEV, key: "token" });
-      await CapacitorCookies.deleteCookie({ url: API_URL_DEV, key: "user" });
+      await CapacitorCookies.deleteCookie({ key: "token" });
+      await CapacitorCookies.deleteCookie({ key: "user" });
     } else {
       Cookies.remove("token", { path: "/" });
       Cookies.remove("user", { path: "/" });
@@ -131,9 +125,7 @@ const AuthService = {
   // Obtener token
   async getToken(): Promise<string | null> {
     if (isNative()) {
-      const { cookies } = await CapacitorCookies.getCookies({
-        url: API_URL_DEV,
-      });
+      const { cookies } = await CapacitorCookies.getCookies({});
       const cookieMap = this.parseCookies(cookies);
       return cookieMap["token"] || null;
     }
@@ -142,9 +134,7 @@ const AuthService = {
 
   async getUserData(): Promise<UserData | null> {
     if (isNative()) {
-      const { cookies } = await CapacitorCookies.getCookies({
-        url: API_URL_DEV,
-      });
+      const { cookies } = await CapacitorCookies.getCookies({});
       const cookieMap = this.parseCookies(cookies);
       const userStr = cookieMap["user"];
       return userStr ? JSON.parse(userStr) : null;
