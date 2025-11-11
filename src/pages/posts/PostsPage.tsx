@@ -12,49 +12,34 @@ import {
   IonSegmentButton,
   IonLabel,
 } from "@ionic/react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import PostsStarWars from "./PostsStarWars";
 import PostsVideoGames from "./PostsVideoGames";
 import PostsAnime from "./PostsAnime";
 import "./PostsPage.css";
 
-// Tipado de los parámetros de la URL
-interface RouteParams {
-  nombre_categoria?: string;
-}
-
 const PostsPage: React.FC = () => {
   const history = useHistory();
-  const { nombre_categoria } = useParams<RouteParams>();
+  const location = useLocation();
 
-  // Estado del tab actual
   const [categoria, setCategoria] = useState<
     "StarWars" | "Videojuegos" | "Anime"
   >("StarWars");
 
-  // Sincroniza el estado con la URL al entrar
+  // Detecta cambio en URL y sincroniza categoría
   useEffect(() => {
-    if (nombre_categoria) {
-      switch (nombre_categoria.toLowerCase()) {
-        case "star-wars":
-          setCategoria("StarWars");
-          break;
-        case "videojuegos":
-          setCategoria("Videojuegos");
-          break;
-        case "anime":
-          setCategoria("Anime");
-          break;
-        default:
-          setCategoria("StarWars");
-      }
+    if (location.pathname.includes("videojuegos")) {
+      setCategoria("Videojuegos");
+    } else if (location.pathname.includes("anime")) {
+      setCategoria("Anime");
+    } else {
+      setCategoria("StarWars");
     }
-  }, [nombre_categoria]);
+  }, [location.pathname]);
 
-  // Cambiar URL cuando el usuario cambia el tab
+  // Cambia URL al seleccionar un tab
   const handleSegmentChange = (value: "StarWars" | "Videojuegos" | "Anime") => {
-    setCategoria(value);
     switch (value) {
       case "StarWars":
         history.push("/posts/star-wars");
@@ -68,7 +53,6 @@ const PostsPage: React.FC = () => {
     }
   };
 
-  // Render dinámico según tab
   const renderContenido = () => {
     switch (categoria) {
       case "StarWars":
@@ -95,7 +79,6 @@ const PostsPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        {/* Tabs fuera del Header */}
         <div className="segment">
           <IonSegment
             value={categoria}
@@ -117,8 +100,9 @@ const PostsPage: React.FC = () => {
           </IonSegment>
         </div>
 
-        {/* Renderizado dinámico */}
-        <div className="posts-container">{renderContenido()}</div>
+        <div key={categoria} className="posts-container">
+          {renderContenido()}
+        </div>
       </IonContent>
     </IonPage>
   );
