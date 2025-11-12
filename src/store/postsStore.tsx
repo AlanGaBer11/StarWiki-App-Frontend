@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import PostService from "../services/PostsService";
-import { PostData, PostsResponse } from "../data/postsData";
+import { PostData, PostsResponse, PostResponse } from "../data/postsData";
 
 interface PostState {
   posts: PostData[];
@@ -60,8 +60,8 @@ export const usePostStore = create<PostState>((set, get) => ({
   fetchPostById: async (id: number) => {
     set({ loading: true, error: null });
     try {
-      const data: PostsResponse = await PostService.getPostById(id);
-      set({ selectedPost: data.posts?.[0] || null, loading: false });
+      const data: PostResponse = await PostService.getPostById(id);
+      set({ selectedPost: data.post || null, loading: false });
     } catch (error: any) {
       set({
         error: error.message || "Error al cargar el post",
@@ -100,7 +100,7 @@ export const usePostStore = create<PostState>((set, get) => ({
         set({ posts: [], loading: false });
       }
     } catch (error: any) {
-      console.warn("⚠️ Error al obtener posts por categoría:", error.message);
+      console.warn("Error al obtener posts por categoría:", error.message);
       // En caso de error de red o servidor, limpiar lista sin generar error visible
       set({ posts: [], loading: false });
     }
@@ -110,11 +110,14 @@ export const usePostStore = create<PostState>((set, get) => ({
   fetchPostByTitle: async (title: string) => {
     set({ loading: true, error: null });
     try {
-      const data: PostsResponse = await PostService.getPostByTitle(title);
-      set({ posts: data.posts, loading: false });
+      const data: PostResponse = await PostService.getPostByTitle(title);
+      set({
+        selectedPost: data.post || null,
+        loading: false,
+      });
     } catch (error: any) {
       set({
-        error: error.message || "Error al obtener posts por título",
+        error: error.message || "Error al obtener post por título",
         loading: false,
       });
     }

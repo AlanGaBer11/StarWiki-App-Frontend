@@ -21,6 +21,7 @@ import OnePiecePage from "../pages/anime/OnePiece";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import PostsPage from "../pages/posts/PostsPage";
+import PostPage from "../pages/posts/PostPage";
 
 const AppRouter: React.FC = () => {
   return (
@@ -103,6 +104,9 @@ const AppRouter: React.FC = () => {
         </Route>
         <Route path="/posts/:nombre_categoria" exact={true}>
           <PostsPage />
+        </Route>
+        <Route path="/post/:nombre_categoria/:titulo_post" exact={true}>
+          <PostPage />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

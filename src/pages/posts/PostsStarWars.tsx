@@ -11,11 +11,26 @@ import {
   IonSkeletonText,
   IonButton,
 } from "@ionic/react";
+import { useHistory } from "react-router";
 import { usePostStore } from "../../store/postsStore";
 import "./Posts.css";
+import { PostData } from "../../data/postsData";
 
 const PostsStarWars: React.FC = () => {
   const { posts, fetchPostsByCategory, loading } = usePostStore();
+  const history = useHistory();
+
+  const handleLeerMas = (post: PostData) => {
+    const nombre_categoria =
+      post.Category?.nombre?.toLowerCase().replaceAll(/\s+/g, "-") || "general";
+    const slug = post.titulo
+      .normalize("NFD")
+      .replaceAll(/[\u0300-\u036f]/g, "")
+      .replaceAll(/[^a-zA-Z0-9\s-]/g, "")
+      .toLowerCase()
+      .replaceAll(/\s+/g, "-");
+    history.push(`/post/${nombre_categoria}/${slug}`);
+  };
 
   useEffect(() => {
     fetchPostsByCategory(2); // ID de categoría Star Wars
@@ -25,8 +40,9 @@ const PostsStarWars: React.FC = () => {
 
   if (loading) {
     //  Mostrar skeletons mientras carga
-    content = Array.from({ length: 3 }).map((_, i) => (
-      <IonCol size="12" sizeMd="4" key={i}>
+    const skeletonKeys = ["s1", "s2", "s3"];
+    content = skeletonKeys.map((key) => (
+      <IonCol size="12" sizeMd="4" key={key}>
         <IonCard className="posts-cards ion-padding">
           <IonSkeletonText
             animated={true}
@@ -42,7 +58,6 @@ const PostsStarWars: React.FC = () => {
           </IonCardHeader>
           <IonCardContent>
             <IonSkeletonText animated={true} style={{ width: "90%" }} />
-            <IonSkeletonText animated={true} style={{ width: "70%" }} />
           </IonCardContent>
           <IonButton expand="block" disabled>
             <IonSkeletonText animated={true} style={{ width: "50%" }} />
@@ -64,8 +79,13 @@ const PostsStarWars: React.FC = () => {
               {post.User?.nombre_usuario || "Autor desconocido"}
             </IonCardSubtitle>
           </IonCardHeader>
-          <IonCardContent>{post.contenido}</IonCardContent>
-          <IonButton routerLink={`/posts/${post.id}`} expand="block">
+          <IonCardContent>
+            {post.contenido.length > 100
+              ? post.contenido.slice(0, 100) + "..."
+              : post.contenido}
+          </IonCardContent>
+
+          <IonButton expand="block" onClick={() => handleLeerMas(post)}>
             Leer más
           </IonButton>
         </IonCard>
