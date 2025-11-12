@@ -1,5 +1,5 @@
 import apiClient from "../router/Interceptor";
-import { PostData, PostsResponse } from "../data/postsData";
+import { PostData, PostsResponse, PostResponse } from "../data/postsData";
 
 const PostService = {
   async getAllPosts(
@@ -15,7 +15,7 @@ const PostService = {
       throw this.handleError(error);
     }
   },
-  async getPostById(id: number): Promise<PostsResponse> {
+  async getPostById(id: number): Promise<PostResponse> {
     try {
       const response = await apiClient.get(`/posts/getPostById/${id}`);
       return response.data;
@@ -39,7 +39,7 @@ const PostService = {
       throw this.handleError(error);
     }
   },
-  async getPostByTitle(titulo: string): Promise<PostsResponse> {
+  async getPostByTitle(titulo: string): Promise<PostResponse> {
     try {
       const response = await apiClient.get(`/posts/getPostByTitle/${titulo}`);
       return response.data;

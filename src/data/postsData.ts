@@ -12,6 +12,7 @@ export interface PostData {
     apellido?: string;
     nombre_usuario: string;
     email?: string;
+    avatar_url?: string;
     fecha_registro?: string;
   };
   Category?: {
@@ -35,4 +36,11 @@ export interface PostsResponse {
     hasPreviousPage: boolean;
   };
   posts: PostData[];
+}
+
+export interface PostResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  post: PostData;
 }
