@@ -67,6 +67,37 @@ const AuthService = {
       throw this.handleError(error);
     }
   },
+  async sendVerificationCode(email: string) {
+    try {
+      const response = await apiClient.post(
+        "/auth/send-verification-code",
+        email
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
+  async verifyAccount(data: { email: string; code: string }) {
+    try {
+      const response = await apiClient.post("/auth/verify-account", data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
+  async resetPassword(data: {
+    email: string;
+    code: string;
+    nesPassword: string;
+  }) {
+    try {
+      const response = await apiClient.post("/auth/reset-password", data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
 
   //Guarda token y usuario en cookies (web o nativo)
   async saveToken(token: string, userData?: UserData) {

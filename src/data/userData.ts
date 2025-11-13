@@ -16,10 +16,24 @@ export interface UserData {
   [key: string]: any;
 }
 
+export interface UsersResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  users: UserData[];
+}
 export interface UserResponse {
   success: boolean;
   status: number;
   message: string;
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalUsers: number;
+    usersPerPage: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
   user: UserData;
 }
 
