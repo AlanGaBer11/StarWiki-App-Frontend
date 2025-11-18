@@ -13,7 +13,7 @@ import {
 } from "@ionic/react";
 import { useHistory } from "react-router";
 import { usePostStore } from "../../store/postsStore";
-import "./Posts.css";
+import "./PostsPages.css";
 import { PostData } from "../../data/postsData";
 
 const PostsAnime: React.FC = () => {

@@ -46,13 +46,18 @@ const PostPage: React.FC = () => {
         <IonCardHeader>
           <IonCardTitle className="ion-text-center">
             <IonSkeletonText animated style={{ width: "60%" }} />
+            <br />
           </IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
           <IonSkeletonText animated style={{ width: "100%" }} />
+          <br />
           <IonSkeletonText animated style={{ width: "90%" }} />
+          <br />
           <IonSkeletonText animated style={{ width: "80%" }} />
+          <br />
           <IonSkeletonText animated style={{ width: "70%" }} />
+          <br />
         </IonCardContent>
       </IonCard>
     );

@@ -14,9 +14,9 @@ import {
 } from "@ionic/react";
 import { useHistory, useLocation } from "react-router-dom";
 
-import PostsStarWars from "./PostsStarWars";
-import PostsVideoGames from "./PostsVideoGames";
-import PostsAnime from "./PostsAnime";
+import PostsStarWars from "./PostsStarWarsPage";
+import PostsVideoGames from "./PostsVideoGamesPage";
+import PostsAnime from "./PostsAnimePage";
 import "./PostsPage.css";
 
 const PostsPage: React.FC = () => {

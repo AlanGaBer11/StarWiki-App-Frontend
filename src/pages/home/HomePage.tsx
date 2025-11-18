@@ -28,7 +28,7 @@ const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen className="ion-padding container">
+      <IonContent fullscreen className="ion-padding">
         {/* Componente de Búsqueda */}
         <SearchBox />
 
