@@ -22,6 +22,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import PostsPage from "../pages/posts/PostsPage";
 import PostPage from "../pages/posts/PostPage";
+import CreatePostButton from "../components/botones/CreatePostButton";
 
 const AppRouter: React.FC = () => {
   return (
@@ -107,6 +108,9 @@ const AppRouter: React.FC = () => {
         </Route>
         <Route path="/post/:nombre_categoria/:titulo_post" exact={true}>
           <PostPage />
+        </Route>
+        <Route path="/crear-post" exact={true}>
+          <CreatePostButton />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

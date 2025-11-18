@@ -27,9 +27,15 @@ const CommentService = {
       throw this.handleError(error);
     }
   },
-  async getCommentsByPost(id_post: number): Promise<CommentResponse> {
+  async getCommentsByPost(
+    id_post: number,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<CommentsResponse> {
     try {
-      const response = await apiClient.get(`/comments/post/${id_post}`);
+      const response = await apiClient.get(
+        `/comments/post/${id_post}?page=${page}&limit=${limit}`
+      );
       return response.data;
     } catch (error) {
       throw this.handleError(error);

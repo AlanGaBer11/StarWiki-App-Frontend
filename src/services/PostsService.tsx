@@ -41,7 +41,9 @@ const PostService = {
   },
   async getPostByTitle(titulo: string): Promise<PostResponse> {
     try {
-      const response = await apiClient.get(`/posts/getPostByTitle/${titulo}`);
+      const response = await apiClient.get(
+        `/posts/getPostByTitle/${encodeURIComponent(titulo)}`
+      );
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -49,7 +51,9 @@ const PostService = {
   },
   async search(term: string): Promise<PostsResponse> {
     try {
-      const response = await apiClient.get(`posts/search?term=${term}`);
+      const response = await apiClient.get(
+        `/posts/search?term=${encodeURIComponent(term)}`
+      );
       return response.data;
     } catch (error) {
       throw this.handleError(error);

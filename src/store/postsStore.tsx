@@ -42,7 +42,7 @@ export const usePostStore = create<PostState>((set, get) => ({
   loading: false,
   error: null,
 
-  /** Obtener todos los posts */
+  /* Obtener todos los posts */
   fetchPosts: async (page = 1, limit = 10) => {
     set({ loading: true, error: null });
     try {
@@ -56,7 +56,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
   },
 
-  /** Obtener post por ID */
+  /* Obtener post por ID */
   fetchPostById: async (id: number) => {
     set({ loading: true, error: null });
     try {
@@ -70,7 +70,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
   },
 
-  /** Obtener posts por usuario */
+  /* Obtener posts por usuario */
   fetchPostsByUser: async (userId: number) => {
     set({ loading: true, error: null });
     try {
@@ -84,7 +84,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
   },
 
-  /** Obtener posts por categoría */
+  /* Obtener posts por categoría */
   fetchPostsByCategory: async (categoryId: number) => {
     set({ loading: true, error: null });
     try {
@@ -106,7 +106,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
   },
 
-  /** Obtener post por título */
+  /* Obtener post por título */
   fetchPostByTitle: async (title: string) => {
     set({ loading: true, error: null });
     try {
@@ -123,7 +123,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
   },
 
-  /** Buscar posts (término libre) */
+  /* Buscar posts (término libre) */
   searchPosts: async (term: string) => {
     set({ loading: true, error: null });
     try {
@@ -134,12 +134,13 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
   },
 
-  /** Crear un nuevo post */
+  /* Crear un nuevo post */
   createPost: async (postData) => {
     set({ loading: true, error: null });
     try {
       await PostService.createPost(postData);
       await get().fetchPosts(); // refrescar lista
+      set({ loading: false });
     } catch (error: any) {
       set({ error: error.message || "Error al crear el post" });
     } finally {
@@ -147,20 +148,22 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
   },
 
-  /** Actualizar un post */
+  /* Actualizar un post */
   updatePost: async (id, postData) => {
     set({ loading: true, error: null });
     try {
       await PostService.updatePost(id, postData);
       await get().fetchPosts();
-    } catch (error: any) {
-      set({ error: error.message || "Error al actualizar el post" });
-    } finally {
       set({ loading: false });
+    } catch (error: any) {
+      set({
+        error: error.message || "Error al actualizar el post",
+        loading: false,
+      });
     }
   },
 
-  /** Eliminar un post */
+  /* Eliminar un post */
   deletePost: async (id) => {
     set({ loading: true, error: null });
     try {

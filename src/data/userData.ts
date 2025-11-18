@@ -1,16 +1,16 @@
 export interface UserData {
-  id: number;
+  id?: number;
   nombre: string;
   apellido: string;
   nombre_usuario: string;
   email: string;
   contrasena?: string;
-  avatar_url: string;
+  avatar_url?: string;
   biografia?: string | null;
   rol: "ADMIN" | "EDITOR" | "USER";
-  verificado: boolean;
-  estado: boolean;
-  fecha_registro: string;
+  verificado?: boolean;
+  estado?: boolean;
+  fecha_registro?: string;
   codigo_verificacion?: string | null;
   expiracion_codigo?: string | null;
   [key: string]: any;

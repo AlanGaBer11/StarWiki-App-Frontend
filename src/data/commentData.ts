@@ -16,6 +16,7 @@ export interface CommentData {
     nombre_usuario: string;
     email?: string;
   };
+  titulo_post?: string;
 }
 
 export interface CommentsResponse {
@@ -26,7 +27,7 @@ export interface CommentsResponse {
     currentPage: number;
     totalPages: number;
     totalComments: number;
-    postsPerPage: number;
+    commentsPerPage: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
   };
