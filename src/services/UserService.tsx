@@ -52,10 +52,9 @@ const UserService = {
   },
   async deactivateUser(id: number, code: string) {
     try {
-      const response = await apiClient.patch(
-        `/users/deactivateUser/${id}`,
-        code
-      );
+      const response = await apiClient.patch(`/users/deactivateUser/${id}`, {
+        code,
+      });
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -63,10 +62,9 @@ const UserService = {
   },
   async reactivateUser(id: number, code: string) {
     try {
-      const response = await apiClient.patch(
-        `/users/reactivateUser/${id}`,
-        code
-      );
+      const response = await apiClient.patch(`/users/reactivateUser/${id}`, {
+        code,
+      });
       return response.data;
     } catch (error) {
       throw this.handleError(error);
