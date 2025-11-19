@@ -167,6 +167,11 @@ export const usePostStore = create<PostState>((set, get) => ({
       throw error;
     } finally {
       set({ loading: false });
+    } catch (error: any) {
+      set({
+        error: error.message || "Error al actualizar el post",
+        loading: false,
+      });
     }
   },
 
