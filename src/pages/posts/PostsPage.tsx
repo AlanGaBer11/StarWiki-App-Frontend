@@ -19,6 +19,7 @@ import {
 import CreatePostModal from "../../components/modals/CreatePostModal";
 import { addOutline, addSharp } from "ionicons/icons";
 import { useHistory, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
 
 import PostsStarWars from "./PostsStarWarsPage";
 import PostsVideoGames from "./PostsVideoGamesPage";
@@ -29,6 +30,12 @@ const PostsPage: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
   const modal = useRef<HTMLIonModalElement>(null);
+
+  const { isAuthenticated, user, checkAuth } = useAuthStore();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const [categoria, setCategoria] = useState<
     "StarWars" | "Videojuegos" | "Anime"
@@ -107,11 +114,21 @@ const PostsPage: React.FC = () => {
           </IonSegment>
         </div>
         <div key={categoria} className="posts-container"></div>
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton id="open-create-post">
-            <IonIcon ios={addOutline} md={addSharp} />
-          </IonFabButton>
-        </IonFab>
+        {/* Mostrar FAB solo si usuario autenticado y rol ADMIN o EDITOR */}
+        {isAuthenticated &&
+          user &&
+          (user.rol === "ADMIN" || user.rol === "EDITOR") && (
+            <IonFab
+              vertical="bottom"
+              horizontal="end"
+              slot="fixed"
+              className="create-fab"
+            >
+              <IonFabButton id="open-create-post">
+                <IonIcon ios={addOutline} md={addSharp} />
+              </IonFabButton>
+            </IonFab>
+          )}
         <IonModal id="create-post-modal" ref={modal} trigger="open-create-post">
           <CreatePostModal dismiss={() => modal.current?.dismiss()} />
         </IonModal>
