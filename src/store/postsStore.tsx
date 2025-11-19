@@ -49,10 +49,10 @@ export const usePostStore = create<PostState>((set, get) => ({
       const data: PostsResponse = await PostService.getAllPosts(page, limit);
       set({ posts: data.posts, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar los posts",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar los posts" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -63,10 +63,10 @@ export const usePostStore = create<PostState>((set, get) => ({
       const data: PostResponse = await PostService.getPostById(id);
       set({ selectedPost: data.post || null, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar el post",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar el post" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -77,10 +77,10 @@ export const usePostStore = create<PostState>((set, get) => ({
       const data: PostsResponse = await PostService.getPostsByUser(userId);
       set({ posts: data.posts, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al obtener posts del usuario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al obtener posts del usuario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -102,7 +102,10 @@ export const usePostStore = create<PostState>((set, get) => ({
     } catch (error: any) {
       console.warn("Error al obtener posts por categoría:", error.message);
       // En caso de error de red o servidor, limpiar lista sin generar error visible
-      set({ posts: [], loading: false });
+      set({ posts: [] });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -116,10 +119,10 @@ export const usePostStore = create<PostState>((set, get) => ({
         loading: false,
       });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al obtener post por título",
-        loading: false,
-      });
+      set({ error: error.message || "Error al obtener post por título" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -130,7 +133,10 @@ export const usePostStore = create<PostState>((set, get) => ({
       const data: PostsResponse = await PostService.search(term);
       set({ posts: data.posts, loading: false });
     } catch (error: any) {
-      set({ error: error.message || "Error en la búsqueda", loading: false });
+      set({ error: error.message || "Error en la búsqueda" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -142,7 +148,8 @@ export const usePostStore = create<PostState>((set, get) => ({
       await get().fetchPosts(); // refrescar lista
       set({ loading: false });
     } catch (error: any) {
-      set({ error: error.message || "Error al crear el post" });
+      set({ error: error.error || "Error al crear el post" });
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -156,10 +163,10 @@ export const usePostStore = create<PostState>((set, get) => ({
       await get().fetchPosts();
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al actualizar el post",
-        loading: false,
-      });
+      set({ error: error.message || "Error al actualizar el post" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -171,6 +178,7 @@ export const usePostStore = create<PostState>((set, get) => ({
       set({ posts: get().posts.filter((p) => p.id !== id) });
     } catch (error: any) {
       set({ error: error.message || "Error al eliminar el post" });
+      throw error;
     } finally {
       set({ loading: false });
     }
