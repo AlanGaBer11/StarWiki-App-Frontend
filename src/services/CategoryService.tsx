@@ -79,8 +79,21 @@ const CategoryService = {
 
     if (error.response) {
       console.error("Error de respuesta:", error.response.data);
-      errorMessage = error.response.data.message || "Error en el servidor";
+      const data = error.response.data || {};
+      // Priorizar `error` (detalle) si existe, luego `message`
+      const detail = data.error ?? data.message ?? null;
+      errorMessage =
+        typeof detail === "string" && detail
+          ? detail
+          : data.message || "Error en el servidor";
       errorStatus = error.response.status;
+
+      const newError: any = new Error(errorMessage);
+      if (errorStatus) newError.status = errorStatus;
+      // Adjuntar la respuesta original para diagnósticos si hace falta
+      newError.response = error.response;
+      newError.error = data.error ?? null;
+      return newError;
     } else if (error.request) {
       console.error("Error de solicitud:", error.request);
       errorMessage = "No se pudo conectar con el servidor";
@@ -90,7 +103,6 @@ const CategoryService = {
     }
 
     const newError: any = new Error(errorMessage);
-    if (errorStatus) newError.status = errorStatus;
     return newError;
   },
 };

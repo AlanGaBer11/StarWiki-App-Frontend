@@ -50,10 +50,10 @@ export const useCommentStore = create<CommentState>((set, get) => ({
       );
       set({ comments: data.comments, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar los comentarios",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar los comentarios" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Obtener comentario por ID */
@@ -63,10 +63,10 @@ export const useCommentStore = create<CommentState>((set, get) => ({
       const data: CommentResponse = await CommentService.getCommentById(id);
       set({ selectedComment: data.comment || null, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar el comentario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar el comentario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Obtener comentarios por post */
@@ -80,10 +80,10 @@ export const useCommentStore = create<CommentState>((set, get) => ({
       );
       set({ comments: data.comments, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar los comentarios",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar los comentarios" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Crear un nuevo comentario */
@@ -94,10 +94,10 @@ export const useCommentStore = create<CommentState>((set, get) => ({
       await get().fetchComments();
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al crear el comentario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al crear el comentario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Actualizar un comentario */
@@ -108,10 +108,10 @@ export const useCommentStore = create<CommentState>((set, get) => ({
       await get().fetchComments();
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al actualizar el comentario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al actualizar el comentario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Eliminar un comentario */
@@ -124,10 +124,10 @@ export const useCommentStore = create<CommentState>((set, get) => ({
         loading: false,
       });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al eliminar el comentario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al eliminar el comentario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 

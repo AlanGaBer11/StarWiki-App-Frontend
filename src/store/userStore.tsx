@@ -51,10 +51,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       const data: UsersResponse = await UserService.getAllUsers(page, limit);
       set({ users: data.users, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar los usuarios",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar los usuarios" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Obtener usuario por ID */
@@ -64,10 +64,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       const data: UserResponse = await UserService.getUserById(id);
       set({ selectedUser: data.user || null, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar el usuario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar el usuario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Crear un usuario */
@@ -78,10 +78,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       await get().fetchUsers(); // Refrescar la lista de usuarios
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al crear el usuario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al crear el usuario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Actualizar un usuario */
@@ -92,10 +92,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       await get().fetchUsers(); // Refrescar la lista de usuarios
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al actualizar el usuario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al actualizar el usuario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Eliminar un usuario */
@@ -105,10 +105,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       await UserService.deleteUser(id);
       set({ users: get().users.filter((u) => u.id !== id), loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al eliminar el usuario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al eliminar el usuario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Desactivar un usuario */
@@ -118,10 +118,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       await UserService.deactivateUser(id, code);
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al desactivar el usuario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al desactivar el usuario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -132,10 +132,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       await UserService.reactivateUser(id, code);
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al reactivar el usuario",
-        loading: false,
-      });
+      set({ error: error.message || "Error al reactivar el usuario" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
   /* Limpiar error */

@@ -48,6 +48,9 @@ export const useCategoryStore = create<CategoryState>((set, get) => ({
         error: error.message || "Error al cargar las categorias",
         loading: false,
       });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -58,10 +61,10 @@ export const useCategoryStore = create<CategoryState>((set, get) => ({
       const data: CategoryResponse = await CategoryService.getCategoryById(id);
       set({ selectedCategory: data.category || null, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al cargar la categoria",
-        loading: false,
-      });
+      set({ error: error.message || "Error al cargar la categoria" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -74,10 +77,10 @@ export const useCategoryStore = create<CategoryState>((set, get) => ({
       );
       set({ selectedCategory: data.category || null, loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al buscar la categoria",
-        loading: false,
-      });
+      set({ error: error.message || "Error al buscar la categoria" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -89,10 +92,10 @@ export const useCategoryStore = create<CategoryState>((set, get) => ({
       await get().fetchCategories(); // Refrescar la lista de categorias
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al crear la categoria",
-        loading: false,
-      });
+      set({ error: error.message || "Error al crear la categoria" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -105,10 +108,10 @@ export const useCategoryStore = create<CategoryState>((set, get) => ({
 
       set({ loading: false });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al actualizar la categoria",
-        loading: false,
-      });
+      set({ error: error.message || "Error al actualizar la categoria" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
@@ -122,10 +125,10 @@ export const useCategoryStore = create<CategoryState>((set, get) => ({
         loading: false,
       });
     } catch (error: any) {
-      set({
-        error: error.message || "Error al eliminar la categoria",
-        loading: false,
-      });
+      set({ error: error.message || "Error al eliminar la categoria" });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
