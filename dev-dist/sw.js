@@ -2197,6 +2197,7 @@ define([],(function () { 'use strict';
             yield statefulCallback;
           }
         }
+        return false;
       }
       /**
        * Adds a promise to the
@@ -2841,7 +2842,76 @@ define([],(function () { 'use strict';
               logger.warn(warningMessage);
             }
           }
+          return {
+            deletedURLs
+          };
+        });
+      }
+      /**
+       * Returns a mapping of a precached URL to the corresponding cache key, taking
+       * into account the revision information for the URL.
+       *
+       * @return {Map<string, string>} A URL to cache key mapping.
+       */
+      getURLsToCacheKeys() {
+        return this._urlsToCacheKeys;
+      }
+      /**
+       * Returns a list of all the URLs that have been precached by the current
+       * service worker.
+       *
+       * @return {Array<string>} The precached URLs.
+       */
+      getCachedURLs() {
+        return [...this._urlsToCacheKeys.keys()];
+      }
+      /**
+       * Returns the cache key used for storing a given URL. If that URL is
+       * unversioned, like `/index.html', then the cache key will be the original
+       * URL with a search parameter appended to it.
+       *
+       * @param {string} url A URL whose cache key you want to look up.
+       * @return {string} The versioned URL that corresponds to a cache key
+       * for the original URL, or undefined if that URL isn't precached.
+       */
+      getCacheKeyForURL(url) {
+        const urlObject = new URL(url, location.href);
+        return this._urlsToCacheKeys.get(urlObject.href);
+      }
+      /**
+       * @param {string} url A cache key whose SRI you want to look up.
+       * @return {string} The subresource integrity associated with the cache key,
+       * or undefined if it's not set.
+       */
+      getIntegrityForCacheKey(cacheKey) {
+        return this._cacheKeysToIntegrities.get(cacheKey);
+      }
+      /**
+       * This acts as a drop-in replacement for
+       * [`cache.match()`](https://developer.mozilla.org/en-US/docs/Web/API/Cache/match)
+       * with the following differences:
+       *
+       * - It knows what the name of the precache is, and only checks in that cache.
+       * - It allows you to pass in an "original" URL without versioning parameters,
+       * and it will automatically look up the correct cache key for the currently
+       * active revision of that URL.
+       *
+       * E.g., `matchPrecache('index.html')` will find the correct precached
+       * response for the currently active service worker, even if the actual cache
+       * key is `'/index.html?__WB_REVISION__=1234abcd'`.
+       *
+       * @param {string|Request} request The key (without revisioning parameters)
+       * to look up in the precache.
+       * @return {Promise<Response|undefined>}
+       */
+      async matchPrecache(request) {
+        const url = request instanceof Request ? request.url : request;
+        const cacheKey = this.getCacheKeyForURL(url);
+        if (cacheKey) {
+          const cache = await self.caches.open(this.strategy.cacheName);
+          return cache.match(cacheKey);
         }
+        return undefined;
       }
       /**
        * Precaches new and updated assets. Call this method from the service worker
@@ -3428,53 +3498,46 @@ define([],(function () { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-  /**
-   * Helper function that calls
-   * {@link PrecacheController#createHandlerBoundToURL} on the default
-   * {@link PrecacheController} instance.
-   *
-   * If you are creating your own {@link PrecacheController}, then call the
-   * {@link PrecacheController#createHandlerBoundToURL} on that instance,
-   * instead of using this function.
-   *
-   * @param {string} url The precached URL which will be used to lookup the
-   * `Response`.
-   * @param {boolean} [fallbackToNetwork=true] Whether to attempt to get the
-   * response from the network if there's a precache miss.
-   * @return {workbox-routing~handlerCallback}
-   *
-   * @memberof workbox-precaching
-   */
-  function createHandlerBoundToURL(url) {
-    const precacheController = getOrCreatePrecacheController();
-    return precacheController.createHandlerBoundToURL(url);
-  }
+    /**
+     * Helper function that calls
+     * {@link PrecacheController#createHandlerBoundToURL} on the default
+     * {@link PrecacheController} instance.
+     *
+     * If you are creating your own {@link PrecacheController}, then call the
+     * {@link PrecacheController#createHandlerBoundToURL} on that instance,
+     * instead of using this function.
+     *
+     * @param {string} url The precached URL which will be used to lookup the
+     * `Response`.
+     * @param {boolean} [fallbackToNetwork=true] Whether to attempt to get the
+     * response from the network if there's a precache miss.
+     * @return {workbox-routing~handlerCallback}
+     *
+     * @memberof workbox-precaching
+     */
+    function createHandlerBoundToURL(url) {
+      const precacheController = getOrCreatePrecacheController();
+      return precacheController.createHandlerBoundToURL(url);
+    }
 
-  self.skipWaiting();
-  clientsClaim();
+    self.skipWaiting();
+    clientsClaim();
 
-  /**
-   * The precacheAndRoute() method efficiently caches and responds to
-   * requests for URLs in the manifest.
-   * See https://goo.gl/S9QRab
-   */
-  precacheAndRoute(
-    [
-      {
-        url: "registerSW.js",
-        revision: "3ca0b8505b4bec776b69afdba2768812",
-      },
-      {
-        url: "index.html",
-        revision: "0.3896iuvino8",
-      },
-    ],
-    {}
-  );
-  cleanupOutdatedCaches();
-  registerRoute(
-    new NavigationRoute(createHandlerBoundToURL("index.html"), {
-      allowlist: [/^\/$/],
-    })
-  );
-});
+    /**
+     * The precacheAndRoute() method efficiently caches and responds to
+     * requests for URLs in the manifest.
+     * See https://goo.gl/S9QRab
+     */
+    precacheAndRoute([{
+      "url": "registerSW.js",
+      "revision": "3ca0b8505b4bec776b69afdba2768812"
+    }, {
+      "url": "index.html",
+      "revision": "0.evfg64sdsl8"
+    }], {});
+    cleanupOutdatedCaches();
+    registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), {
+      allowlist: [/^\/$/]
+    }));
+
+}));

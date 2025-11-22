@@ -9,6 +9,8 @@ import { CapacitorCookies } from "@capacitor/core";
 import ToastService from "../services/ToastService";
 
 const API_URL_DEV = "http://localhost:3000/api/v2";
+const API_URL_PROD =
+  "starwiki-app-backend-f2bxg7a2gxh6gvd3.mexicocentral-01.azurewebsites.net/api/v2";
 
 /* RUTAS QUE REQUIEREN AUTENTICACIÓN */
 const AUTH_ROUTES: readonly string[] = [
@@ -32,6 +34,9 @@ const AUTH_ROUTES: readonly string[] = [
   "/posts/deletePost",
 
   /* COMENTARIOS */
+  "/comments/getComments",
+  "/comments/getCommentById",
+  "/comments/post",
   "/comments/createComment",
   "/comments/updateComment",
   "/comments/deleteComment",
@@ -90,8 +95,6 @@ apiClient.interceptors.response.use(
         ToastService.error("No autorizado. Inicia sesión nuevamente.");
       } else if (status === 403) {
         ToastService.error("Acceso denegado. No tienes permisos.");
-      } else if (status >= 400 && status < 500) {
-        ToastService.error("Error en la solicitud. Verifica los datos.");
       } else if (status >= 500) {
         ToastService.error("Error en el servidor. Intenta más tarde.");
       }

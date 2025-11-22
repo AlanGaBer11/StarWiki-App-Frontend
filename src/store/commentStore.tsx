@@ -5,6 +5,7 @@ import {
   CommentsResponse,
   CommentResponse,
 } from "../data/commentData";
+import { usePostStore } from "./postsStore";
 
 interface CommentState {
   comments: CommentData[];
@@ -78,8 +79,13 @@ export const useCommentStore = create<CommentState>((set, get) => ({
         page,
         limit
       );
-      set({ comments: data.comments, loading: false });
+      set({ comments: data.comments || [], loading: false });
     } catch (error: any) {
+      // Si la API devuelve 404 significa "no hay comentarios" -> limpiar array y no propagar
+      if (error?.status === 404) {
+        set({ comments: [], loading: false, error: null });
+        return;
+      }
       set({ error: error.message || "Error al cargar los comentarios" });
       throw error;
     } finally {
@@ -91,7 +97,13 @@ export const useCommentStore = create<CommentState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       await CommentService.createComment(commentData);
-      await get().fetchComments();
+      // Re-fetch comments del post actualmente seleccionado si existe
+      const currentPost = usePostStore.getState().selectedPost;
+      if (currentPost?.id) {
+        await get().fetchCommentsByPost(currentPost.id);
+      } else {
+        await get().fetchComments();
+      }
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message || "Error al crear el comentario" });
@@ -105,7 +117,12 @@ export const useCommentStore = create<CommentState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       await CommentService.updateComment(id, commentData);
-      await get().fetchComments();
+      const currentPost = usePostStore.getState().selectedPost;
+      if (currentPost?.id) {
+        await get().fetchCommentsByPost(currentPost.id);
+      } else {
+        await get().fetchComments();
+      }
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message || "Error al actualizar el comentario" });
@@ -119,10 +136,15 @@ export const useCommentStore = create<CommentState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       await CommentService.deleteComment(id);
-      set({
-        comments: get().comments.filter((c) => c.id !== id),
-        loading: false,
-      });
+      // Después de borrar, volver a cargar comentarios del post seleccionado
+      const currentPost = usePostStore.getState().selectedPost;
+      if (currentPost?.id) {
+        await get().fetchCommentsByPost(currentPost.id);
+      } else {
+        // si no hay post seleccionado sólo remover localmente
+        set({ comments: get().comments.filter((c) => c.id !== id) });
+      }
+      set({ loading: false });
     } catch (error: any) {
       set({ error: error.message || "Error al eliminar el comentario" });
       throw error;

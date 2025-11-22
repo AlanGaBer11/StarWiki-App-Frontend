@@ -1,0 +1,46 @@
+ion-modal.reusable-modal {
+  --height: 60%;
+  --border-radius: 20px;
+  --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+ion-modal.reusable-modal.comment-modal {
+  --height: 40%;
+}
+
+/* BACKDROP DIFUMINADO */
+ion-modal.reusable-modal::part(backdrop) {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(3px);
+  opacity: 1;
+}
+
+/* HEADER */
+ion-modal.reusable-modal ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: white;
+}
+
+/* INPUTS */
+.create-item {
+  --background: transparent;
+  --border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+/* BOTÓN CREAR */
+.create-button {
+  margin-top: 20px;
+  height: 45px;
+  font-weight: bold;
+  border-radius: 14px;
+}
+
+@media (max-width: 768px) {
+  ion-modal.reusable-modal {
+    --height: 45%;
+  }
+  ion-modal.reusable-modal.comment-modal {
+    --height: 30%;
+  }
+}

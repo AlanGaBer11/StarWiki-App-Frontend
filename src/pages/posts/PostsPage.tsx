@@ -20,6 +20,7 @@ import CreatePostModal from "../../components/modals/CreatePostModal";
 import { addOutline, addSharp } from "ionicons/icons";
 import { useHistory, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
+import { usePostStore } from "../../store/postsStore"; // Importamos el store de posts
 
 import PostsStarWars from "./PostsStarWarsPage";
 import PostsVideoGames from "./PostsVideoGamesPage";
@@ -29,9 +30,10 @@ import "./PostsPage.css";
 const PostsPage: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
-  const modal = useRef<HTMLIonModalElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { isAuthenticated, user, checkAuth } = useAuthStore();
+  const { fetchPostsByCategory } = usePostStore(); // Obtenemos la función para recargar
 
   useEffect(() => {
     checkAuth();
@@ -63,6 +65,21 @@ const PostsPage: React.FC = () => {
         break;
       case "Anime":
         history.push("/posts/anime");
+        break;
+    }
+  };
+
+  // Función para recargar los posts según la pestaña actual
+  const handleRefreshPosts = () => {
+    switch (categoria) {
+      case "StarWars":
+        fetchPostsByCategory(2);
+        break;
+      case "Anime":
+        fetchPostsByCategory(4);
+        break;
+      case "Videojuegos":
+        fetchPostsByCategory(5);
         break;
     }
   };
@@ -124,13 +141,24 @@ const PostsPage: React.FC = () => {
               slot="fixed"
               className="create-fab"
             >
-              <IonFabButton id="open-create-post">
+              {/* Eliminamos el ID y usamos onClick */}
+              <IonFabButton onClick={() => setIsModalOpen(true)}>
                 <IonIcon ios={addOutline} md={addSharp} />
               </IonFabButton>
             </IonFab>
           )}
-        <IonModal id="create-post-modal" ref={modal} trigger="open-create-post">
-          <CreatePostModal dismiss={() => modal.current?.dismiss()} />
+
+        {/* Controlamos el modal con isOpen y onDidDismiss */}
+        <IonModal
+          id="create-modal"
+          className="reusable-modal"
+          isOpen={isModalOpen}
+          onDidDismiss={() => setIsModalOpen(false)}
+        >
+          <CreatePostModal
+            dismiss={() => setIsModalOpen(false)}
+            onSuccess={handleRefreshPosts} // Pasamos la función de recarga
+          />
         </IonModal>
 
         {renderContenido()}

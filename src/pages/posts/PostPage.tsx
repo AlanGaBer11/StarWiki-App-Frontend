@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   IonPage,
   IonHeader,
@@ -14,9 +14,12 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
+  IonModal,
 } from "@ionic/react";
 import { useParams } from "react-router";
 import { usePostStore } from "../../store/postsStore";
+import { useCommentStore } from "../../store/commentStore";
+import CreateCommentModal from "../../components/modals/CreateCommentModal";
 import PostContent from "../../components/content/PostContent";
 
 interface RouteParams {
@@ -27,11 +30,19 @@ interface RouteParams {
 const PostPage: React.FC = () => {
   const { titulo_post } = useParams<RouteParams>();
   const { selectedPost, fetchPostByTitle, loading, error } = usePostStore();
+  const { comments, fetchCommentsByPost } = useCommentStore();
+  const modal = useRef<HTMLIonModalElement>(null);
 
   useEffect(() => {
     const titulo = titulo_post.replaceAll("-", " ");
     fetchPostByTitle(titulo);
   }, [titulo_post, fetchPostByTitle]);
+
+  useEffect(() => {
+    if (selectedPost?.id) {
+      fetchCommentsByPost(selectedPost.id);
+    }
+  }, [selectedPost, fetchCommentsByPost]);
 
   // Extraemos la lógica del renderizado condicional en una variable
   let content;
@@ -68,7 +79,13 @@ const PostPage: React.FC = () => {
       </IonText>
     );
   } else if (selectedPost) {
-    content = <PostContent post={selectedPost} />;
+    content = (
+      <PostContent
+        post={selectedPost}
+        comments={comments}
+        onOpenModal={() => modal.current?.present()}
+      />
+    );
   } else {
     content = (
       <IonText color="medium">
@@ -94,6 +111,18 @@ const PostPage: React.FC = () => {
       <IonContent fullscreen className="ion-padding">
         {content}
       </IonContent>
+      <IonModal
+        id="create-comment-modal"
+        className="reusable-modal comment-modal"
+        ref={modal}
+      >
+        {selectedPost && (
+          <CreateCommentModal
+            dismiss={() => modal.current?.dismiss()}
+            initialPost={{ id: selectedPost.id!, titulo: selectedPost.titulo }}
+          />
+        )}
+      </IonModal>
     </IonPage>
   );
 };

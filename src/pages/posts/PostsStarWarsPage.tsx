@@ -10,15 +10,27 @@ import {
   IonCardContent,
   IonSkeletonText,
   IonButton,
+  IonChip,
 } from "@ionic/react";
 import { useHistory } from "react-router";
 import { usePostStore } from "../../store/postsStore";
-import "./PostsPages.css";
 import { PostData } from "../../data/postsData";
+import "./PostsPages.css";
 
 const PostsStarWars: React.FC = () => {
   const { posts, fetchPostsByCategory, loading } = usePostStore();
   const history = useHistory();
+
+  // Función para formatear la fecha
+  const formatearFecha = (fechaString?: string) => {
+    if (!fechaString) return "Fecha desconocida";
+    const fecha = new Date(fechaString);
+    return fecha.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long", // "noviembre" (usa "short" para "nov")
+      day: "numeric",
+    });
+  };
 
   const handleLeerMas = (post: PostData) => {
     const nombre_categoria =
@@ -53,6 +65,7 @@ const PostsStarWars: React.FC = () => {
               <IonSkeletonText animated={true} style={{ width: "80%" }} />
             </IonCardTitle>
             <IonCardSubtitle className="ion-text-center">
+              <IonSkeletonText animated={true} style={{ width: "40%" }} />
               <IonSkeletonText animated={true} style={{ width: "60%" }} />
             </IonCardSubtitle>
           </IonCardHeader>
@@ -72,11 +85,14 @@ const PostsStarWars: React.FC = () => {
         <IonCard className="posts-cards ion-padding">
           <img src={post.url_imagen} alt={post.titulo} />
           <IonCardHeader>
-            <IonCardTitle className="ion-text-center">
+            <IonCardTitle className="ion-text-center" color="primary">
               <b>{post.titulo}</b>
             </IonCardTitle>
-            <IonCardSubtitle className="ion-text-center">
+            <IonCardSubtitle>
               {post.User?.nombre_usuario || "Autor desconocido"}
+              <IonChip color="secondary">
+                {formatearFecha(post.fecha_publicacion)}
+              </IonChip>
             </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
