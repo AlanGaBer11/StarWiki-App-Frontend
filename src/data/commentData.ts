@@ -15,6 +15,7 @@ export interface CommentData {
     apellido?: string;
     nombre_usuario: string;
     email?: string;
+    avatar_url?: string;
   };
   titulo_post?: string;
 }

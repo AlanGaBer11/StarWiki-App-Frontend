@@ -1,4 +1,3 @@
-// CreatePostModal.tsx
 import React, { useState, useEffect, FormEvent } from "react";
 import {
   IonHeader,
@@ -17,9 +16,17 @@ import {
 import ToastService from "../../services/ToastService";
 import { useCategoryStore } from "../../store/categoryStore";
 import { usePostStore } from "../../store/postsStore";
-import "./CreatePostModal.css";
+import "./CreateModal.css";
 
-const CreatePostModal: React.FC<{ dismiss: () => void }> = ({ dismiss }) => {
+interface CreatePostModalProps {
+  dismiss: () => void;
+  onSuccess: () => void; // Agregamos esta nueva prop
+}
+
+const CreatePostModal: React.FC<CreatePostModalProps> = ({
+  dismiss,
+  onSuccess,
+}) => {
   const [data, setData] = useState({
     titulo: "",
     contenido: "",
@@ -71,6 +78,7 @@ const CreatePostModal: React.FC<{ dismiss: () => void }> = ({ dismiss }) => {
       });
 
       ToastService.success("Post creado correctamente");
+      onSuccess(); // Ejecutamos la actualización de la lista
       dismiss();
     } catch (error: any) {
       ToastService.error(error.message || "Error al crear el post");
@@ -90,7 +98,7 @@ const CreatePostModal: React.FC<{ dismiss: () => void }> = ({ dismiss }) => {
 
       <IonContent fullscreen className="ion-padding">
         <form onSubmit={handleSubmit}>
-          <IonItem className="create-post-item">
+          <IonItem className="create-item">
             <IonInput
               name="titulo"
               value={data.titulo}
@@ -100,7 +108,7 @@ const CreatePostModal: React.FC<{ dismiss: () => void }> = ({ dismiss }) => {
             />
           </IonItem>
 
-          <IonItem className="create-post-item">
+          <IonItem className="create-item">
             <IonInput
               name="contenido"
               value={data.contenido}
@@ -110,7 +118,7 @@ const CreatePostModal: React.FC<{ dismiss: () => void }> = ({ dismiss }) => {
             />
           </IonItem>
 
-          <IonItem className="create-post-item">
+          <IonItem className="create-item">
             <IonInput
               name="url_imagen"
               value={data.url_imagen}
@@ -120,13 +128,14 @@ const CreatePostModal: React.FC<{ dismiss: () => void }> = ({ dismiss }) => {
             />
           </IonItem>
 
-          <IonItem className="create-post-item">
+          <IonItem className="create-item">
             {loadingCategories ? (
-              <IonSpinner />
+              <IonSpinner name="dots" />
             ) : (
               <IonSelect
                 label="Categoría"
                 value={selectedCategoryId}
+                labelPlacement="floating"
                 onIonChange={(e) => setSelectedCategoryId(e.detail.value)}
               >
                 {categories.map((cat) => (
@@ -138,12 +147,8 @@ const CreatePostModal: React.FC<{ dismiss: () => void }> = ({ dismiss }) => {
             )}
           </IonItem>
 
-          <IonButton
-            expand="block"
-            type="submit"
-            className="create-post-button"
-          >
-            {loadingPosts ? <IonSpinner /> : "Crear"}
+          <IonButton expand="block" type="submit" className="create-button">
+            {loadingPosts ? <IonSpinner name="dots" /> : "Crear"}
           </IonButton>
         </form>
       </IonContent>

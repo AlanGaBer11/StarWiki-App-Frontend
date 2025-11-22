@@ -6,10 +6,6 @@
   background: var(--ion-background-color, #fff);
 }
 
-.posts-container {
-  padding: 16px;
-}
-
 ion-fab {
   margin: 0;
   padding-bottom: 16px;

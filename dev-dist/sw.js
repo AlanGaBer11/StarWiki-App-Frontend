@@ -3428,53 +3428,46 @@ define([],(function () { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-  /**
-   * Helper function that calls
-   * {@link PrecacheController#createHandlerBoundToURL} on the default
-   * {@link PrecacheController} instance.
-   *
-   * If you are creating your own {@link PrecacheController}, then call the
-   * {@link PrecacheController#createHandlerBoundToURL} on that instance,
-   * instead of using this function.
-   *
-   * @param {string} url The precached URL which will be used to lookup the
-   * `Response`.
-   * @param {boolean} [fallbackToNetwork=true] Whether to attempt to get the
-   * response from the network if there's a precache miss.
-   * @return {workbox-routing~handlerCallback}
-   *
-   * @memberof workbox-precaching
-   */
-  function createHandlerBoundToURL(url) {
-    const precacheController = getOrCreatePrecacheController();
-    return precacheController.createHandlerBoundToURL(url);
-  }
+    /**
+     * Helper function that calls
+     * {@link PrecacheController#createHandlerBoundToURL} on the default
+     * {@link PrecacheController} instance.
+     *
+     * If you are creating your own {@link PrecacheController}, then call the
+     * {@link PrecacheController#createHandlerBoundToURL} on that instance,
+     * instead of using this function.
+     *
+     * @param {string} url The precached URL which will be used to lookup the
+     * `Response`.
+     * @param {boolean} [fallbackToNetwork=true] Whether to attempt to get the
+     * response from the network if there's a precache miss.
+     * @return {workbox-routing~handlerCallback}
+     *
+     * @memberof workbox-precaching
+     */
+    function createHandlerBoundToURL(url) {
+      const precacheController = getOrCreatePrecacheController();
+      return precacheController.createHandlerBoundToURL(url);
+    }
 
-  self.skipWaiting();
-  clientsClaim();
+    self.skipWaiting();
+    clientsClaim();
 
-  /**
-   * The precacheAndRoute() method efficiently caches and responds to
-   * requests for URLs in the manifest.
-   * See https://goo.gl/S9QRab
-   */
-  precacheAndRoute(
-    [
-      {
-        url: "registerSW.js",
-        revision: "3ca0b8505b4bec776b69afdba2768812",
-      },
-      {
-        url: "index.html",
-        revision: "0.3896iuvino8",
-      },
-    ],
-    {}
-  );
-  cleanupOutdatedCaches();
-  registerRoute(
-    new NavigationRoute(createHandlerBoundToURL("index.html"), {
-      allowlist: [/^\/$/],
-    })
-  );
-});
+    /**
+     * The precacheAndRoute() method efficiently caches and responds to
+     * requests for URLs in the manifest.
+     * See https://goo.gl/S9QRab
+     */
+    precacheAndRoute([{
+      "url": "registerSW.js",
+      "revision": "3ca0b8505b4bec776b69afdba2768812"
+    }, {
+      "url": "index.html",
+      "revision": "0.evfg64sdsl8"
+    }], {});
+    cleanupOutdatedCaches();
+    registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), {
+      allowlist: [/^\/$/]
+    }));
+
+}));
