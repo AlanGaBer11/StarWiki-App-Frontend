@@ -12,16 +12,13 @@ export default defineConfig({
     legacy(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["icon/logo.png", "img/st-episodios/1.webp"],
+      includeAssets: ["icon/logo.png"],
+      manifest: false, // usa tu manifest existente
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,webp,svg}"],
+        globPatterns: ["**/*.{js,css,html,ico,png,webp,jpg,svg}"],
       },
-      injectRegister: "auto",
-      srcDir: "public",
-      filename: "sw.js",
-      manifest: false,
       devOptions: {
-        enabled: true,
+        enabled: true, // para ver sw.js en modo dev
       },
     }),
   ],
