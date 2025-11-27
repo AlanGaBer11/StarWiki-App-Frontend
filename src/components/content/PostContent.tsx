@@ -135,7 +135,7 @@ const PostContent: React.FC<PostContentProps> = ({
                       {comment.User?.nombre_usuario || "Usuario desconocido"}
                     </IonCardTitle>
                     <IonCardSubtitle className="comment-date">
-                      {comment.fecha_creacion}
+                      {formatearFecha(comment.fecha_creacion)}
                     </IonCardSubtitle>
                   </IonCardHeader>
 

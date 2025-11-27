@@ -45,7 +45,7 @@ const PostsStarWars: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPostsByCategory(2); // ID de categoría Star Wars
+    fetchPostsByCategory(1); // ID de categoría Star Wars
   }, []);
 
   let content;

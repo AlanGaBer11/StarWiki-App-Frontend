@@ -12,8 +12,10 @@ export default defineConfig({
     legacy(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["icon/logo.png"],
-
+      includeAssets: ["icon/logo.png", "img/st-episodios/1.webp"],
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,webp,svg}"],
+      },
       injectRegister: "auto",
       srcDir: "public",
       filename: "sw.js",

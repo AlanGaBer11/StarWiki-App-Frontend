@@ -45,7 +45,7 @@ const PostsAnime: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPostsByCategory(4); // ID de categoría Anime
+    fetchPostsByCategory(3); // ID de categoría Anime
   }, []);
 
   let content;

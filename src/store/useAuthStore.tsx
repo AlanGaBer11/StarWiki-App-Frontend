@@ -7,6 +7,8 @@ interface AuthState {
   token: string | null;
   loading: boolean;
   isAuthenticated: boolean;
+  isAdmin: boolean;
+  isLoggedIn: boolean;
 
   // Actions
   register: (
@@ -27,6 +29,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   token: null,
   loading: false,
   isAuthenticated: false,
+  isAdmin: false,
+  isLoggedIn: false,
 
   // REGISTER
   register: async (
@@ -67,6 +71,8 @@ export const useAuthStore = create<AuthState>((set) => ({
           user: response.user,
           token: response.token,
           isAuthenticated: true,
+          isAdmin: response.user?.role === "ADMIN",
+          isLoggedIn: true,
         });
       }
     } catch (error: any) {
@@ -86,6 +92,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         user: null,
         token: null,
         isAuthenticated: false,
+        isAdmin: false,
+        isLoggedIn: false,
       });
     }
   },
@@ -99,6 +107,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       token,
       user,
       isAuthenticated: !!token,
+      isAdmin: user?.role === "ADMIN",
+      isLoggedIn: !!token,
     });
   },
 

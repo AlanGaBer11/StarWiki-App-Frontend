@@ -10,7 +10,7 @@ import ToastService from "../services/ToastService";
 
 const API_URL_DEV = "http://localhost:3000/api/v2";
 const API_URL_PROD =
-  "starwiki-app-backend-f2bxg7a2gxh6gvd3.mexicocentral-01.azurewebsites.net/api/v2";
+  "https://starwiki-app-backend-f2bxg7a2gxh6gvd3.mexicocentral-01.azurewebsites.net/api/v2";
 
 /* RUTAS QUE REQUIEREN AUTENTICACIÓN */
 const AUTH_ROUTES: readonly string[] = [
@@ -44,7 +44,7 @@ const AUTH_ROUTES: readonly string[] = [
 
 /* Crear instancia de axios */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: API_URL_DEV,
+  baseURL: API_URL_PROD,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
