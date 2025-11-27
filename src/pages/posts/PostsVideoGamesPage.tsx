@@ -45,7 +45,7 @@ const PostsVideoGames: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPostsByCategory(5); // ID de categoría Videojuegos
+    fetchPostsByCategory(2); // ID de categoría Videojuegos
   }, []);
 
   let content;
