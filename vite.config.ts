@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -9,23 +11,36 @@ export default defineConfig({
     legacy(),
     VitePWA({
       strategies: "injectManifest",
-
       srcDir: "public",
       filename: "sw.js",
 
       injectManifest: {
         swSrc: "public/sw.js",
-        swDest: "sw.js",
+        swDest: "dist/sw.js",
         injectionPoint: undefined,
+      },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,png,jpg,jpeg,webp,gif,svg}"],
       },
 
       manifest: false,
-      includeAssets: ["icon/logo.png"],
-
-      devOptions: {
-        enabled: true,
-        type: "module",
-      },
     }),
   ],
+
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+  },
+
+  server: {
+    proxy: {
+      "/api/demonslayer": {
+        target: "https://www.demonslayer-api.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/demonslayer/, ""),
+        secure: false,
+      },
+    },
+  },
 });

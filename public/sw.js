@@ -1,39 +1,27 @@
-// Obligatorio para que Workbox inserte los assets
-self.__WB_MANIFEST;
+// public/sw.js  (injectManifest expects this file)
+/// <reference lib="webworker" />
 
-// Nombre de los caches para runtime
+// Obligatorio: Workbox inyecta aquí el manifest
+self.__WB_MANIFEST = self.__WB_MANIFEST || [];
+
+// IMPORTANTE: usar workbox-precaching para precache + routing
+import { precacheAndRoute } from "workbox-precaching";
+
+// Esta línea hace que Workbox precachee TODAS las entradas inyectadas
+precacheAndRoute(self.__WB_MANIFEST);
+
 const RUNTIME_CACHE = "runtime-cache-v1";
 
-// INSTALL — Workbox maneja el precache
-self.addEventListener("install", () => {
-  console.log("[SW] Instalando (injectManifest)...");
-  self.skipWaiting();
-});
-
-// ACTIVATE — limpiar caches viejos
+// ACTIVATE — limpiar caches antiguos si quieres
 self.addEventListener("activate", (event) => {
-  console.log("[SW] Activando…");
-
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.map((key) => {
-          if (key !== RUNTIME_CACHE) {
-            console.log("[SW] Borrando cache viejo:", key);
-            return caches.delete(key);
-          }
-        })
-      )
-    )
-  );
-
-  self.clients.claim();
+  event.waitUntil(self.clients.claim());
 });
 
-// FETCH — estrategias
+// FETCH — Cache First para assets (estáticos) y Network First para todo lo demás
 self.addEventListener("fetch", (event) => {
   const req = event.request;
 
+  // Cache First: estilos, scripts, imágenes (nota: las imágenes ya las habrá precacheado arriba)
   if (
     req.destination === "style" ||
     req.destination === "script" ||
@@ -43,38 +31,34 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Network First para navegación / API
   event.respondWith(networkFirst(req));
 });
 
-// Cache First
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;
 
   try {
-    const res = await fetch(request);
+    const response = await fetch(request);
     const cache = await caches.open(RUNTIME_CACHE);
-    cache.put(request, res.clone());
-    return res;
+    cache.put(request, response.clone());
+    return response;
   } catch (err) {
-    console.warn("[SW] CacheFirst ERROR:", err);
-    throw err;
+    const fallback = await caches.match("/index.html");
+    return fallback || Response.error();
   }
 }
 
-// Network First
 async function networkFirst(request) {
   try {
-    const res = await fetch(request);
+    const response = await fetch(request);
     const cache = await caches.open(RUNTIME_CACHE);
-    cache.put(request, res.clone());
-    return res;
+    cache.put(request, response.clone());
+    return response;
   } catch (err) {
-    console.warn("[SW] NetworkFirst ERROR:", err);
-
     const cached = await caches.match(request);
     if (cached) return cached;
-
     return caches.match("/index.html");
   }
 }
