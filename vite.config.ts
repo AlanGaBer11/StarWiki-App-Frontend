@@ -1,5 +1,3 @@
-/// <reference types="vitest" />
-
 import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -26,21 +24,4 @@ export default defineConfig({
       manifest: false,
     }),
   ],
-
-  test: {
-    globals: true,
-    environment: "jsdom",
-    setupFiles: "./src/setupTests.ts",
-  },
-
-  server: {
-    proxy: {
-      "/api/demonslayer": {
-        target: "https://www.demonslayer-api.com",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/demonslayer/, ""),
-        secure: false,
-      },
-    },
-  },
 });
