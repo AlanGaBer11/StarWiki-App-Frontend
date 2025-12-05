@@ -14,13 +14,9 @@ export default defineConfig({
 
       // NO USAR WORKBOX, NO USAR INJECTMANIFEST
       strategies: "generateSW",
-
-      // Solo registra tu SW manual
       srcDir: "public/pwa",
       filename: "service-worker.js",
-
       manifest: false,
-
       devOptions: {
         enabled: true,
         type: "module",
