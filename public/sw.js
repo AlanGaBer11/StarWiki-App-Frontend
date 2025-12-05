@@ -17,7 +17,6 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-// FETCH — Cache First para assets (estáticos) y Network First para todo lo demás
 self.addEventListener("fetch", (event) => {
   const req = event.request;
 
@@ -35,14 +34,36 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(networkFirst(req));
 });
 
+function isRequestCacheable(request) {
+  if (!request || request.method !== "GET") return false;
+  try {
+    const url = new URL(request.url);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch (e) {
+    return false;
+  }
+}
+
+function shouldCache(request, response) {
+  if (!isRequestCacheable(request)) return false;
+  if (!response) return false;
+  // Only cache successful responses; skip opaque or error responses to be safe
+  if (!response.ok) return false;
+  if (response.type === "opaque") return false;
+  return true;
+}
+
+/* ESTRATEGIA: CACHE FIRST */
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;
 
   try {
     const response = await fetch(request);
-    const cache = await caches.open(RUNTIME_CACHE);
-    cache.put(request, response.clone());
+    if (shouldCache(request, response)) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      await cache.put(request, response.clone());
+    }
     return response;
   } catch (err) {
     const fallback = await caches.match("/index.html");
@@ -50,11 +71,14 @@ async function cacheFirst(request) {
   }
 }
 
+/* ESTRATEGIA: NETWORK FIRST */
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
-    const cache = await caches.open(RUNTIME_CACHE);
-    cache.put(request, response.clone());
+    if (shouldCache(request, response)) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      await cache.put(request, response.clone());
+    }
     return response;
   } catch (err) {
     const cached = await caches.match(request);
@@ -62,3 +86,38 @@ async function networkFirst(request) {
     return caches.match("/index.html");
   }
 }
+
+/* NOTIFICACIONES PUSH */
+self.addEventListener("push", (event) => {
+  if (!(self.Notification && self.Notification.permission === "granted")) {
+    return;
+  }
+  const data = event.data.json();
+  const title = data.title;
+  const message = data.message;
+  const icon = data.icon;
+  const tag = data.tag;
+  const url = data.url;
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: message,
+      tag,
+      icon,
+      data: {
+        url: url,
+      },
+    })
+  );
+});
+
+// Handle the notification click event
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close(); // close the notification
+  var url = event.notification.data.url; // get the URL from the notification data
+  if (url) {
+    event.waitUntil(
+      clients.openWindow(url) // open the URL in a new window
+    );
+  }
+});
