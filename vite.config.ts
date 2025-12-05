@@ -9,23 +9,19 @@ export default defineConfig({
     legacy(),
     VitePWA({
       strategies: "injectManifest",
-
       srcDir: "public",
       filename: "sw.js",
 
       injectManifest: {
         swSrc: "public/sw.js",
-        swDest: "sw.js",
+        swDest: "dist/sw.js",
         injectionPoint: undefined,
+      },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,png,jpg,jpeg,webp,gif,svg}"],
       },
 
       manifest: false,
-      includeAssets: ["icon/logo.png"],
-
-      devOptions: {
-        enabled: true,
-        type: "module",
-      },
     }),
   ],
 });
