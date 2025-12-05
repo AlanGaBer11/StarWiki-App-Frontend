@@ -1,9 +1,10 @@
+import React from "react";
 import { IonPage, IonContent, IonButton, IonIcon, IonText } from "@ionic/react";
 import { homeOutline, mapOutline, homeSharp, mapSharp } from "ionicons/icons";
 import { Link } from "react-router-dom";
 import "./ErrorPages.css";
 
-const NotFoundPage = () => {
+const NotFoundPage: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="ion-padding" fullscreen>

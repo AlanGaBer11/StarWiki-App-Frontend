@@ -1,38 +1,37 @@
 import React from "react";
 import { IonPage, IonContent, IonButton, IonIcon, IonText } from "@ionic/react";
 import {
-  arrowBackOutline,
-  lockClosedOutline,
-  arrowBackSharp,
-  lockClosedSharp,
+  constructOutline,
+  constructSharp,
+  homeOutline,
+  homeSharp,
 } from "ionicons/icons";
 import { Link } from "react-router-dom";
 import "./ErrorPages.css";
 
-const UnauthorizedPage: React.FC = () => {
+const BuildPage: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="ion-padding" fullscreen>
         <div className="error-container">
           <div className="error-icon">
-            <IonIcon ios={lockClosedOutline} md={lockClosedSharp} />
+            <IonIcon ios={constructOutline} md={constructSharp} />
           </div>
 
           <IonText>
-            <h1>Error 403</h1>
-            <h2>Acceso denegado</h2>
-            <p>No tienes permisos para acceder a este módulo.</p>
+            <h1>En Construcción</h1>
+            <h2>Esta ruta está en desarrollo</h2>
+            <p>
+              Estamos trabajando arduamente para traerte esta funcionalidad muy
+              pronto. ¡Gracias por tu paciencia!
+            </p>
           </IonText>
 
           <div className="error-actions">
             <Link to="/">
               <IonButton color="primary" shape="round">
-                <IonIcon
-                  ios={arrowBackOutline}
-                  md={arrowBackSharp}
-                  slot="start"
-                />
-                Volver atrás
+                <IonIcon ios={homeOutline} md={homeSharp} slot="start" />
+                Volver al inicio
               </IonButton>
             </Link>
           </div>
@@ -42,4 +41,4 @@ const UnauthorizedPage: React.FC = () => {
   );
 };
 
-export default UnauthorizedPage;
+export default BuildPage;
