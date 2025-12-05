@@ -11,19 +11,15 @@ export default defineConfig({
     legacy(),
     VitePWA({
       registerType: "autoUpdate",
-      manifest: false, // usa el manifest existente en public/manifest.json
 
-      // Modo para usar Service Worker en public/pwa/service-worker.js
-      strategies: "injectManifest",
+      // NO USAR WORKBOX, NO USAR INJECTMANIFEST
+      strategies: "generateSW",
       srcDir: "public/pwa",
       filename: "service-worker.js",
-
-      injectManifest: {
-        globPatterns: ["**/*.{js,css,html,ico,png,webp,jpg,svg}"],
-      },
-
+      manifest: false,
       devOptions: {
-        enabled: true, // para ver el SW en modo dev
+        enabled: true,
+        type: "module",
       },
     }),
   ],

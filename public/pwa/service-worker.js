@@ -6,9 +6,8 @@ const RUNTIME_CACHE = "runtime-cache-v1";
 const PRECACHE_ASSETS = [
   "/", // home
   "/index.html",
-  "/icon/logo-32x32.png",
-  "/icon/logo-192x192.png",
-  "/icon/logo-512x512.png",
+  "/icon/logo.png",
+  "/img/st-episodios/1.webp",
 ];
 
 // =============================
