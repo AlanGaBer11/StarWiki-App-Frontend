@@ -38,6 +38,7 @@ import PostPage from "../pages/posts/PostPage";
 /* Errors */
 import NotFoundPage from "../pages/error/NotFoundPage";
 import UnauthorizedPage from "../pages/error/UnauthorizedPage";
+import BuildPage from "../pages/error/BuildPage";
 
 /* Protección */
 import ProtectedRoute from "./ProtectedRoutes";
@@ -136,6 +137,14 @@ const AppRouter: React.FC = () => {
         </Route>
         <Route path="/post/:nombre_categoria/:titulo_post" exact>
           <PostPage />
+        </Route>
+
+        {/* Rutas en construcción */}
+        <Route path="/perfil">
+          <BuildPage />
+        </Route>
+        <Route path="/admin">
+          <BuildPage />
         </Route>
 
         {/* 404 - Ruta no encontrada */}

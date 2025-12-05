@@ -13,6 +13,7 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { useAuthStore } from "../../store/useAuthStore";
+import { Link } from "react-router-dom";
 import {
   calendarOutline,
   calendarSharp,
@@ -21,8 +22,8 @@ import {
 } from "ionicons/icons";
 import { PostData } from "../../data/postsData";
 import { CommentData } from "../../data/commentData";
-import "./PostContent.css";
 import logo from "/icon/logo.png";
+import "./PostContent.css";
 
 interface PostContentProps {
   post: PostData;
@@ -110,6 +111,7 @@ const PostContent: React.FC<PostContentProps> = ({
           <p>{post.contenido || "Sin contenido disponible"}</p>
         </IonText>
       </div>
+      {/* Sección de comentarios */}
       <div className="comentarios-container">
         <div>
           <h2>Comentarios</h2>
@@ -121,34 +123,48 @@ const PostContent: React.FC<PostContentProps> = ({
           </IonButton>
         )}
 
-        {comments && comments.length > 0 ? (
-          comments.map((comment) => (
-            <IonCard key={comment.id} className="comment-card">
-              <div className="comment-wrapper">
-                <IonAvatar className="comment-avatar">
-                  <img alt="Avatar" src={comment.User?.avatar_url || logo} />
-                </IonAvatar>
+        {isAuthenticated ? (
+          comments && comments.length > 0 ? (
+            comments.map((comment) => (
+              <IonCard key={comment.id} className="comment-card">
+                <div className="comment-wrapper">
+                  <IonAvatar className="comment-avatar">
+                    <img alt="Avatar" src={comment.User?.avatar_url || logo} />
+                  </IonAvatar>
 
-                <div className="comment-content">
-                  <IonCardHeader className="comment-header">
-                    <IonCardTitle className="comment-username">
-                      {comment.User?.nombre_usuario || "Usuario desconocido"}
-                    </IonCardTitle>
-                    <IonCardSubtitle className="comment-date">
-                      {formatearFecha(comment.fecha_creacion)}
-                    </IonCardSubtitle>
-                  </IonCardHeader>
+                  <div className="comment-content">
+                    <IonCardHeader className="comment-header">
+                      <IonCardTitle className="comment-username">
+                        {comment.User?.nombre_usuario || "Usuario desconocido"}
+                      </IonCardTitle>
+                      <IonCardSubtitle className="comment-date">
+                        {formatearFecha(comment.fecha_creacion)}
+                      </IonCardSubtitle>
+                    </IonCardHeader>
 
-                  <IonCardContent className="comment-text">
-                    {comment.contenido}
-                  </IonCardContent>
+                    <IonCardContent className="comment-text">
+                      {comment.contenido}
+                    </IonCardContent>
+                  </div>
                 </div>
-              </div>
-            </IonCard>
-          ))
+              </IonCard>
+            ))
+          ) : (
+            <IonText color="medium">
+              <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+            </IonText>
+          )
         ) : (
           <IonText color="medium">
-            <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+            <p>
+              Debes iniciar sesión para ver los comentarios o crear un
+              comentario
+            </p>
+            <Link to="/login">
+              <IonButton expand="block" shape="round">
+                Iniciar sesión para ver los comentarios
+              </IonButton>
+            </Link>
           </IonText>
         )}
       </div>

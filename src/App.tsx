@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IonApp, IonSplitPane, setupIonicReact } from "@ionic/react";
+import { SplashScreen } from "@capacitor/splash-screen";
 import AppRouter from "./router/AppRouter";
 import Toast from "./components/toast/Toast";
 
@@ -25,6 +26,12 @@ import "./theme/variables.css";
 setupIonicReact();
 
 const App: React.FC = () => {
+  useEffect(() => {
+    SplashScreen.show({
+      autoHide: true,
+      showDuration: 3000,
+    });
+  }, []);
   return (
     <IonApp>
       {/* Envolvemos todo en el split pane (menú lateral)*/}
