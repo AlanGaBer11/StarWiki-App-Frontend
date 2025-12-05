@@ -1,13 +1,38 @@
 // Nombre de los cachés
-const CACHE_NAME = "starwiki-cache-v1";
+const CACHE_NAME = "starwiki-cache-v2";
 const RUNTIME_CACHE = "runtime-cache-v1";
 
 // Archivos a precachear
 const PRECACHE_ASSETS = [
   "/", // home
   "/index.html",
+  "/manifest.json",
+
+  // Iconos
   "/icon/logo.png",
+  "/icon/logo-16x16.png",
+  "/icon/logo-24x24.png",
+  "/icon/logo-32x32.png",
+  "/icon/logo-64x64.png",
+  "/icon/logo-192x192.png",
+  "/icon/logo-512x512.png",
+  "/icon/logo-1024x1024.png",
+
+  // GIFs (Videos)
+  "/video/anime.gif",
+  "/video/star-wars.gif",
+  "/video/video-games.gif",
+
+  // Imágenes de episodios
   "/img/st-episodios/1.webp",
+  "/img/st-episodios/2.webp",
+  "/img/st-episodios/3.webp",
+  "/img/st-episodios/4.webp",
+  "/img/st-episodios/5.webp",
+  "/img/st-episodios/6.webp",
+  "/img/st-episodios/7.webp",
+  "/img/st-episodios/8.webp",
+  "/img/st-episodios/9.webp",
 ];
 
 // =============================
