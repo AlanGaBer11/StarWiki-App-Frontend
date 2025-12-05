@@ -10,18 +10,18 @@ export const WIKICARDS: WikiCardData[] = [
     titulo: "Star Wars",
     class: "card-st",
     link: "/star-wars",
-    gif: "/src/assets/video/star-wars.gif",
+    gif: "/video/star-wars.gif",
   },
   {
     titulo: "Videojuegos",
     class: "card-vd",
     link: "/videojuegos",
-    gif: "/src/assets/video/video-games.gif",
+    gif: "/video/video-games.gif",
   },
   {
     titulo: "Anime",
     class: "card-anime",
     link: "/anime",
-    gif: "/src/assets/video/anime.gif",
+    gif: "/video/anime.gif",
   },
 ];
