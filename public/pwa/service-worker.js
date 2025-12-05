@@ -108,8 +108,7 @@ self.addEventListener("fetch", (event) => {
 // Estrategia: Cache First
 // =============================
 async function cacheFirst(request) {
-  const cache = await caches.open(RUNTIME_CACHE);
-  const cached = await cache.match(request);
+  const cached = await caches.match(request);
 
   if (cached) {
     // Devolver desde caché
@@ -119,6 +118,7 @@ async function cacheFirst(request) {
   // Si no está en caché → pedir a la red
   try {
     const response = await fetch(request);
+    const cache = await caches.open(RUNTIME_CACHE);
     cache.put(request, response.clone());
     return response;
   } catch (err) {
@@ -131,23 +131,22 @@ async function cacheFirst(request) {
 // Estrategia: Network First
 // =============================
 async function networkFirst(request) {
-  const cache = await caches.open(RUNTIME_CACHE);
-
   try {
     const response = await fetch(request);
+    const cache = await caches.open(RUNTIME_CACHE);
     cache.put(request, response.clone());
     return response;
   } catch (err) {
     console.warn("[SW] NetworkFirst ERROR:", err);
 
     // Si falla → intentar usar caché
-    const cached = await cache.match(request);
+    const cached = await caches.match(request);
 
     if (cached) {
       return cached;
     }
 
-    // Opcional: fallback offline
+    // Fallback offline
     return caches.match("/index.html");
   }
 }
