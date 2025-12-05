@@ -24,6 +24,9 @@ const config: CapacitorConfig = {
       layoutName: "launch_screen",
       useDialog: false,
     },
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"],
+    },
   },
 };
 
