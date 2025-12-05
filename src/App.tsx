@@ -3,6 +3,7 @@ import { IonApp, IonSplitPane, setupIonicReact } from "@ionic/react";
 import { SplashScreen } from "@capacitor/splash-screen";
 import AppRouter from "./router/AppRouter";
 import Toast from "./components/toast/Toast";
+import { NotificationAPIProvider } from "@notificationapi/react";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -34,11 +35,19 @@ const App: React.FC = () => {
   }, []);
   return (
     <IonApp>
-      {/* Envolvemos todo en el split pane (menú lateral)*/}
-      <IonSplitPane contentId="main">
-        <AppRouter /> {/* Componente de Router */}
-      </IonSplitPane>
-      <Toast />
+      {/* Notificaciones Push */}
+      <NotificationAPIProvider
+        userId="alangaber11@gmail.com"
+        clientId="xr4b0rf8wmw1bklzdunze6nh16"
+        webPushOptInMessage={true}
+        customServiceWorkerPath="/sw.js"
+      >
+        {/* Envolvemos todo en el split pane (menú lateral)*/}
+        <IonSplitPane contentId="main">
+          <AppRouter /> {/* Componente de Router */}
+        </IonSplitPane>
+        <Toast />
+      </NotificationAPIProvider>
     </IonApp>
   );
 };
