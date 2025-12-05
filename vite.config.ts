@@ -18,11 +18,8 @@ export default defineConfig({
         swSrc: "public/sw.js",
         swDest: "dist/sw.js",
         injectionPoint: undefined,
+        globPatterns: ["**/*.{js,css,html,ico,png,webp,jpg, jpeg, gif,svg}"],
       },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,png,jpg,jpeg,webp,gif,svg}"],
-      },
-
       manifest: false,
     }),
   ],
