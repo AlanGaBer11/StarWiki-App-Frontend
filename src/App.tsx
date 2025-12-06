@@ -4,6 +4,7 @@ import { SplashScreen } from "@capacitor/splash-screen";
 import AppRouter from "./router/AppRouter";
 import Toast from "./components/toast/Toast";
 import { NotificationAPIProvider } from "@notificationapi/react";
+import IndexedDBService from "./services/IndexedDBService";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -28,10 +29,11 @@ setupIonicReact();
 
 const App: React.FC = () => {
   useEffect(() => {
-    SplashScreen.show({
-      autoHide: true,
-      showDuration: 3000,
-    });
+    const initApp = async () => {
+      await IndexedDBService.init();
+      SplashScreen.show({ autoHide: true, showDuration: 3000 });
+    };
+    initApp();
   }, []);
   return (
     <IonApp>
